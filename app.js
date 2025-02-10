@@ -1,15 +1,47 @@
-const button = document.getElementById("add")
+function createDiv() {
+    // Créer le div
+    const div = document.createElement("div");
 
-button.addEventListener("click", function () {
-    const ul = document.getElementById("liste")
-    const li = document.createElement("li")
+    // Créer l'élément li
+    const li = document.createElement("li");
+
+    // recuperer valeur form
+    const name = document.getElementById("name").value
+
+    //lier a li
+    li.textContent = name;
+
+    //creation checkbox
     const checkbox = document.createElement("input")
     checkbox.type = "checkbox"
 
-    const name = document.getElementById("name").value
+    // creer bouton supp
+    const button = document.createElement("button");
+    button.textContent = "Supprimer";
+    button.addEventListener("click", function() {
+        div.remove();
+    });
 
-    li.innerText = name
 
-    ul.append(checkbox)
-    ul.append(li)
-})
+    div.appendChild(checkbox)
+    div.appendChild(li);
+    div.appendChild(button);
+
+
+    document.getElementById("liste").appendChild(div);
+}
+
+
+
+function update_check()
+{
+    const liste = document.querySelectorAll("ul>input")
+ 
+    liste.forEach(items => {
+        if(items.checked)
+        {
+            console.log("CheckBox Cliqué")
+        }
+    })
+}
+ 
