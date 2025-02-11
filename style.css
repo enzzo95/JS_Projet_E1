@@ -1,0 +1,109 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+header {
+  width: 100%;
+  height: 125px;
+  display: block;
+  background-color: #3498db;
+  text-align: center;
+  border-radius: 20px;
+}
+header h1{
+  color:white;
+  margin-top: 45px;
+  font-family:'Courier New', Courier, monospace;
+}
+.main {
+  margin-top: 20px;
+  max-width: 600px;
+  background-color: white;
+  padding: 20px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+.writeTask {
+  display: flex;
+  align-items: center;
+}
+
+.writeTask input {
+  width: 545px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+}
+
+.writeTask #add {
+  padding: 10px 15px;
+  border: 1px solid #3498db;
+  background-color: #3498db;
+  color: white;
+  border-radius: 10px;
+}
+
+.trierTask {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.trierTask #tri {
+  padding: 10px;
+  border: 1px solid #e67e22;
+  background-color: #e67e22;
+  color: white;
+  border-radius: 15px;
+}
+.trierTask #compteur {
+  margin-right: auto;
+  font-size: 16px;
+}
+
+ul {
+  list-style: none;
+  margin-top: 20px;
+}
+
+ul div {
+  padding: 10px;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+ul li {
+  margin: 10px;
+  flex: 1;
+}
+
+ul div #date{
+    color: gray;
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+ul div #modifier {
+  padding: 5px 10px;
+  border: 1px solid #3498db;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+ul#liste div #supprimer {
+  padding: 5px 10px;
+  border: 1px solid #e67e22;
+  background-color: #e67e22;
+  color: white;
+  border-radius: 4px;
+}

@@ -1,31 +1,34 @@
 /*
     Eden : récupérer valeur du formulaire, gestion de la date, listener du button tri, Fonction : update_check(), get_date(), tri_date(asc_or_desc)
-    Enzo : listener du button add, Fonction : createDiv(), edit(div), CSS
+    Enzo : Fonctionnalités : ajouter, supprimer, modifier, barrer et mettre en bas si check. CSS
 */
 
 // Constante du bouton créer
-const button_add = document.getElementById("add")
-const button_tri = document.getElementById("tri")
+const addButton = document.getElementById("add");
+const sortButton = document.getElementById("tri");
 
-let compteur_tri = 0;
+let sortCounter = 0;
 
 // Actions si le bouton créer est cliqué
-button_add.addEventListener("click", function() {
+addButton.addEventListener("click", function() {
     // Si le contenu de la tache n'est pas vide
     if (document.getElementById("name").value) {
-        createDiv()
-        update_check()
+        createDiv();
+        updateCheck();
     }
-})
+});
 
-button_tri.addEventListener("click", function() {
-    compteur_tri += 1;
+sortButton.addEventListener("click", function() {
+    sortCounter += 1;
     
-    (compteur_tri % 2 == 0) ? tri_date("asc") : tri_date("desc");
-})
+    (sortCounter % 2 == 0) ? sortDate("asc") : sortDate("desc");
+});
 
 // Fonction créer une tache
 function createDiv() {
+
+    const list = document.getElementById("liste");
+
     // Créer le div et li
     const div = document.createElement("div");
     const li = document.createElement("li");
@@ -41,103 +44,109 @@ function createDiv() {
     checkbox.type = "checkbox";
     checkbox.id = "checkbox";
     checkbox.addEventListener("change", function() {
-        update_check()
-    })
+        updateCheck();
+        checkbox.checked ? (li.style.textDecoration = "line-through", list.appendChild(div))
+                        : li.style.textDecoration = "none";
+    });
 
     // Création bouton de suppression + eventListener
-    const button_delete = document.createElement("button");
-    button_delete.textContent = "Supprimer";
-    button_delete.addEventListener("click", function() {
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Supprimer";
+    deleteButton.id = "supprimer";
+    deleteButton.addEventListener("click", function() {
         div.remove();
-        update_check();
+        updateCheck();
     });
 
     // Création bouton edit + eventListener
-    const button_edit = document.createElement("button");
-    button_edit.textContent = "Modifier"
-    button_edit.addEventListener("click", function() {
+    const editButton = document.createElement("button");
+    editButton.textContent = "Modifier";
+    editButton.id = "modifier";
+    editButton.addEventListener("click", function() {
         edit(div);
     });
 
-    let date = new Date()
-    const p_date = document.createElement("p")
-    p_date.id = "date"
-    p_date.innerText = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " - " 
-                        + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+    let date = new Date();
+    const pDate = document.createElement("p");
+    pDate.id = "date";
+    pDate.innerText = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " - " 
+                        + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
     // Ajout des éléments au div
     div.appendChild(checkbox);
     div.appendChild(li);
-    div.appendChild(button_edit);
-    div.appendChild(button_delete);
+    div.appendChild(pDate);
+    div.appendChild(editButton);
+    div.appendChild(deleteButton);
 
     // Ajout du div dans le ul "liste"
-    document.getElementById("liste").appendChild(div);
-    div.appendChild(p_date)
+    list.appendChild(div);
+
 }
 
-function update_check() {
-    const liste = document.querySelectorAll("ul > div > input")
-    const p = document.getElementById("compteur")
+function updateCheck() {
+    const liste = document.querySelectorAll("ul > div > input");
+    const p = document.getElementById("compteur");
 
-    let compteur = 0
-    let max = 0
+    let compteur = 0;
+    let max = 0;
 
     liste.forEach(items => {
-        max += 1
+        max += 1;
 
         if (items.checked) {
-            compteur += 1
+            compteur += 1;
         }
-    })
+    });
 
-    p.innerText = "Tache(s) " + compteur + " / " + max
+    p.innerText = "Tache(s) " + compteur + " / " + max;
 }
 
 // Fonction modifier tache
 function edit(div) {
-    // Récupere le li
+    // Récupere le li et modifyButton
     const li = div.querySelector("li");
+    const modifyButton = div.querySelector("#modifier");
 
     // Création zone de texte
-    const newText = document.createElement("input");
-    newText.type = "text";
-    newText.value = li.textContent;   
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = li.textContent;   
 
     // Création bouton de validation + eventListener
     const saveButton = document.createElement("button");
     saveButton.textContent = "Valider";
     saveButton.addEventListener("click", function() {
-        if (newText.value) {
-            let new_date = new Date()
+        if (input.value) {
+            let newDate = new Date();
 
-            const p_date = div.querySelector("p")
+            const pDate = div.querySelector("p");
 
-            li.textContent = newText.value;
-            newText.replaceWith(li)
-            p_date.innerText = new_date.getDate() + "/" + (new_date.getMonth() + 1) + "/" + new_date.getFullYear() + " - " 
-                        + new_date.getHours() + ":" + new_date.getMinutes() + ":" + new_date.getSeconds()
+            li.textContent = input.value;
+            input.replaceWith(li);
+            pDate.innerText = newDate.getDate() + "/" + (newDate.getMonth() + 1) + "/" + newDate.getFullYear() + " - " 
+                        + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds();
 
-            saveButton.remove();
+            saveButton.replaceWith(modifyButton);
         }
     });
 
     // Remplace li par zone de texte et ajoute bouton validation
-    li.replaceWith(newText);
-    div.appendChild(saveButton);
+    li.replaceWith(input);
+    modifyButton.replaceWith(saveButton);
 }
 
-function get_date()
+function getDate()
 {
-    const liste = document.querySelectorAll("ul > div > p")
+    const liste = document.querySelectorAll("ul > div > p");
     let dates = [];
 
     liste.forEach(items => {
-        let temp  = []
+        let temp  = [];
 
-        let dateSplitParts = items.innerText.split(" - ")
-        let datePart = dateSplitParts[0].split("/")
-        let timePart = dateSplitParts[1].split(":")
+        let dateSplitParts = items.innerText.split(" - ");
+        let datePart = dateSplitParts[0].split("/");
+        let timePart = dateSplitParts[1].split(":");
 
         for (let i = datePart.length - 1; i >= 0; i--)
         {
@@ -146,52 +155,52 @@ function get_date()
         
         for (let j = 0; j < timePart.length; j++)
         {
-            temp.push(timePart[j])
+            temp.push(timePart[j]);
         }
 
-        dates.push(temp)
-    })
+        dates.push(temp);
+    });
 
-    return dates
+    return dates;
 }
 
-function tri_date(asc_or_desc)
+function sortDate(asc_or_desc)
 {
-    const liste = document.querySelectorAll("ul > div > p")
-    const ul = document.querySelector("ul")
+    const liste = document.querySelectorAll("ul > div > p");
+    const ul = document.querySelector("ul");
 
-    let task = get_date()   
-    let order_task = []
+    let task = getDate()   ;
+    let orderTask = [];
 
     task.sort((a, b) => {
-        let dateA = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5])
-        let dateB = new Date(b[0], b[1] - 1, b[2], b[3], b[4], b[5])
+        let dateA = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
+        let dateB = new Date(b[0], b[1] - 1, b[2], b[3], b[4], b[5]);
 
         if (asc_or_desc == 'asc')
         {
-            button_tri.innerHTML = "Tri par date ascendant"
-            return dateA - dateB
+            sortButton.innerHTML = "Tri par date ascendant";
+            return dateA - dateB;
         }
         
         else
         {
-            button_tri.innerHTML = "Tri par date descendant"
-            return dateB - dateA
+            sortButton.innerHTML = "Tri par date descendant";
+            return dateB - dateA;
         }
-    })
+    });
 
     for (let i = 0; i < task.length; i++) {
-        let date = task[i][2] + "/" + task[i][1] + "/" + task[i][0] + " - " + task[i][3] + ":" + task[i][4] + ":" + task[i][5]
+        let date = task[i][2] + "/" + task[i][1] + "/" + task[i][0] + " - " + task[i][3] + ":" + task[i][4] + ":" + task[i][5];
 
         liste.forEach(item => {
             if (date == item.innerText) {
-                order_task.push(item.parentElement)
+                orderTask.push(item.parentElement);
             }
-        })
+        });
     }
 
-    ul.innerHTML = ""
-    order_task.forEach(item => {
-        ul.appendChild(item)
-    })
+    ul.innerHTML = "";
+    orderTask.forEach(item => {
+        ul.appendChild(item);
+    });
 }

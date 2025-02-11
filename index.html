@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Todo List</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <h1>Todo List</h1>
+    </header>
     <div class="main">
-        <form id="form">
-            <input type="text" id="name" required>
-        </form>
+
+        <div class="writeTask">
+            <form id="form">
+                <input type="text" id="name" required>
+            </form>
+            <button id="add">+</button>
+        </div>
+
+        <div class="trierTask">
+            <p id="compteur"></p>
+            <button id="tri">Tri par date</button>
+        </div>
 
         <ul id="liste"></ul>
-        <button id="add">Ajouter une tache</button>
-        <button id="tri">Tri par date</button>
-
-        <p id="compteur"></p>
 
     </div>
 
