@@ -1,27 +1,31 @@
 /*
-    Eden : Formulaire, Fonction qui verifie les box check
-    Enzo : Fonction création div, supprime et modifie
+    Eden : récupérer valeur du formulaire, gestion de la date, listener du button tri, Fonction : update_check(), get_date(), tri_date(asc_or_desc)
+    Enzo : listener du button add, Fonction : createDiv(), edit(div), CSS
 */
-
-
 
 // Constante du bouton créer
 const button_add = document.getElementById("add")
+const button_tri = document.getElementById("tri")
+
+let compteur_tri = 0;
 
 // Actions si le bouton créer est cliqué
 button_add.addEventListener("click", function() {
-
     // Si le contenu de la tache n'est pas vide
-    if (document.getElementById("name").value)
-    {
+    if (document.getElementById("name").value) {
         createDiv()
         update_check()
     }
 })
 
+button_tri.addEventListener("click", function() {
+    compteur_tri += 1;
+    
+    (compteur_tri % 2 == 0) ? tri_date("asc") : tri_date("desc");
+})
+
 // Fonction créer une tache
 function createDiv() {
-
     // Créer le div et li
     const div = document.createElement("div");
     const li = document.createElement("li");
@@ -70,11 +74,9 @@ function createDiv() {
     // Ajout du div dans le ul "liste"
     document.getElementById("liste").appendChild(div);
     div.appendChild(p_date)
-
 }
 
-function update_check()
-{
+function update_check() {
     const liste = document.querySelectorAll("ul > div > input")
     const p = document.getElementById("compteur")
 
@@ -84,8 +86,7 @@ function update_check()
     liste.forEach(items => {
         max += 1
 
-        if (items.checked)
-        {
+        if (items.checked) {
             compteur += 1
         }
     })
@@ -94,8 +95,7 @@ function update_check()
 }
 
 // Fonction modifier tache
-function edit(div)
-{
+function edit(div) {
     // Récupere le li
     const li = div.querySelector("li");
 
@@ -104,13 +104,11 @@ function edit(div)
     newText.type = "text";
     newText.value = li.textContent;   
 
-
     // Création bouton de validation + eventListener
     const saveButton = document.createElement("button");
     saveButton.textContent = "Valider";
     saveButton.addEventListener("click", function() {
-        if (newText.value) 
-        {
+        if (newText.value) {
             let new_date = new Date()
 
             const p_date = div.querySelector("p")
@@ -127,4 +125,73 @@ function edit(div)
     // Remplace li par zone de texte et ajoute bouton validation
     li.replaceWith(newText);
     div.appendChild(saveButton);
+}
+
+function get_date()
+{
+    const liste = document.querySelectorAll("ul > div > p")
+    let dates = [];
+
+    liste.forEach(items => {
+        let temp  = []
+
+        let dateSplitParts = items.innerText.split(" - ")
+        let datePart = dateSplitParts[0].split("/")
+        let timePart = dateSplitParts[1].split(":")
+
+        for (let i = datePart.length - 1; i >= 0; i--)
+        {
+            temp.push(datePart[i]);
+        }
+        
+        for (let j = 0; j < timePart.length; j++)
+        {
+            temp.push(timePart[j])
+        }
+
+        dates.push(temp)
+    })
+
+    return dates
+}
+
+function tri_date(asc_or_desc)
+{
+    const liste = document.querySelectorAll("ul > div > p")
+    const ul = document.querySelector("ul")
+
+    let task = get_date()   
+    let order_task = []
+
+    task.sort((a, b) => {
+        let dateA = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5])
+        let dateB = new Date(b[0], b[1] - 1, b[2], b[3], b[4], b[5])
+
+        if (asc_or_desc == 'asc')
+        {
+            button_tri.innerHTML = "Tri par date ascendant"
+            return dateA - dateB
+        }
+        
+        else
+        {
+            button_tri.innerHTML = "Tri par date descendant"
+            return dateB - dateA
+        }
+    })
+
+    for (let i = 0; i < task.length; i++) {
+        let date = task[i][2] + "/" + task[i][1] + "/" + task[i][0] + " - " + task[i][3] + ":" + task[i][4] + ":" + task[i][5]
+
+        liste.forEach(item => {
+            if (date == item.innerText) {
+                order_task.push(item.parentElement)
+            }
+        })
+    }
+
+    ul.innerHTML = ""
+    order_task.forEach(item => {
+        ul.appendChild(item)
+    })
 }
