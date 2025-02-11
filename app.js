@@ -1,3 +1,10 @@
+/*
+    Eden : Formulaire, Fonction qui verifie les box check
+    Enzo : Fonction création div, supprime et modifie
+*/
+
+
+
 // Constante du bouton créer
 const button_add = document.getElementById("add")
 
@@ -48,6 +55,12 @@ function createDiv() {
         edit(div);
     });
 
+    let date = new Date()
+    const p_date = document.createElement("p")
+    p_date.id = "date"
+    p_date.innerText = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " - " 
+                        + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+
     // Ajout des éléments au div
     div.appendChild(checkbox);
     div.appendChild(li);
@@ -56,9 +69,10 @@ function createDiv() {
 
     // Ajout du div dans le ul "liste"
     document.getElementById("liste").appendChild(div);
+    div.appendChild(p_date)
+
 }
 
-// Fonction compter taches faites/totale
 function update_check()
 {
     const liste = document.querySelectorAll("ul > div > input")
@@ -67,7 +81,6 @@ function update_check()
     let compteur = 0
     let max = 0
 
-    // Compte le nombre d'elements total et checkList coché
     liste.forEach(items => {
         max += 1
 
@@ -77,7 +90,6 @@ function update_check()
         }
     })
 
-    // Affichage compteur
     p.innerText = "Tache(s) " + compteur + " / " + max
 }
 
@@ -90,7 +102,8 @@ function edit(div)
     // Création zone de texte
     const newText = document.createElement("input");
     newText.type = "text";
-    newText.value = li.textContent;
+    newText.value = li.textContent;   
+
 
     // Création bouton de validation + eventListener
     const saveButton = document.createElement("button");
@@ -98,8 +111,15 @@ function edit(div)
     saveButton.addEventListener("click", function() {
         if (newText.value) 
         {
+            let new_date = new Date()
+
+            const p_date = div.querySelector("p")
+
             li.textContent = newText.value;
             newText.replaceWith(li)
+            p_date.innerText = new_date.getDate() + "/" + (new_date.getMonth() + 1) + "/" + new_date.getFullYear() + " - " 
+                        + new_date.getHours() + ":" + new_date.getMinutes() + ":" + new_date.getSeconds()
+
             saveButton.remove();
         }
     });
