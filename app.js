@@ -3,15 +3,12 @@
     Enzo : Fonctionnalités : ajouter, supprimer, modifier, barrer et mettre en bas si check. CSS
 */
 
-// Constante du bouton créer
 const addButton = document.getElementById("add");
 const sortButton = document.getElementById("tri");
 
 let sortCounter = 0;
 
-// Actions si le bouton créer est cliqué
 addButton.addEventListener("click", function() {
-    // Si le contenu de la tache n'est pas vide
     if (document.getElementById("name").value) {
         createDiv();
         updateCheck();
@@ -24,22 +21,17 @@ sortButton.addEventListener("click", function() {
     (sortCounter % 2 == 0) ? sortDate("asc") : sortDate("desc");
 });
 
-// Fonction créer une tache
 function createDiv() {
 
     const list = document.getElementById("liste");
 
-    // Créer le div et li
     const div = document.createElement("div");
     const li = document.createElement("li");
 
-    // Récupérer valeur du form (texte de la tache)
     const name = document.getElementById("name").value;
 
-    // Ajout valeur du form dans le li
     li.textContent = name;
 
-    // Création checkbox + eventListener
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.id = "checkbox";
@@ -49,7 +41,6 @@ function createDiv() {
                         : li.style.textDecoration = "none";
     });
 
-    // Création bouton de suppression + eventListener
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Supprimer";
     deleteButton.id = "supprimer";
@@ -58,7 +49,6 @@ function createDiv() {
         updateCheck();
     });
 
-    // Création bouton edit + eventListener
     const editButton = document.createElement("button");
     editButton.textContent = "Modifier";
     editButton.id = "modifier";
@@ -72,14 +62,12 @@ function createDiv() {
     pDate.innerText = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " - " 
                         + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
-    // Ajout des éléments au div
     div.appendChild(checkbox);
     div.appendChild(li);
     div.appendChild(pDate);
     div.appendChild(editButton);
     div.appendChild(deleteButton);
 
-    // Ajout du div dans le ul "liste"
     list.appendChild(div);
 
 }
@@ -102,19 +90,18 @@ function updateCheck() {
     p.innerText = "Tache(s) " + compteur + " / " + max;
 }
 
-// Fonction modifier tache
 function edit(div) {
-    // Récupere le li et modifyButton
+
     const li = div.querySelector("li");
     const modifyButton = div.querySelector("#modifier");
 
-    // Création zone de texte
     const input = document.createElement("input");
+    input.id = "editInput"
     input.type = "text";
     input.value = li.textContent;   
 
-    // Création bouton de validation + eventListener
     const saveButton = document.createElement("button");
+    saveButton.id = "save"
     saveButton.textContent = "Valider";
     saveButton.addEventListener("click", function() {
         if (input.value) {
@@ -131,7 +118,6 @@ function edit(div) {
         }
     });
 
-    // Remplace li par zone de texte et ajoute bouton validation
     li.replaceWith(input);
     modifyButton.replaceWith(saveButton);
 }
