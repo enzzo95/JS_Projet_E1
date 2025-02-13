@@ -9,7 +9,7 @@ const sortButton = document.getElementById("tri");
 let sortCounter = 0;
 
 addButton.addEventListener("click", function() {
-    if (document.getElementById("name").value) {
+    if (document.getElementById("name").value) {    // Si value du form non vide
         createDiv();
         updateCheck();
     }
@@ -21,15 +21,14 @@ sortButton.addEventListener("click", function() {
     (sortCounter % 2 == 0) ? sortDate("asc") : sortDate("desc");
 });
 
+// Créer une tache
 function createDiv() {
 
     const list = document.getElementById("liste");
+    const name = document.getElementById("name").value;
 
     const div = document.createElement("div");
     const li = document.createElement("li");
-
-    const name = document.getElementById("name").value;
-
     li.textContent = name;
 
     const checkbox = document.createElement("input");
@@ -37,7 +36,7 @@ function createDiv() {
     checkbox.id = "checkbox";
     checkbox.addEventListener("change", function() {
         updateCheck();
-        checkbox.checked ? (li.style.textDecoration = "line-through", list.appendChild(div))
+        checkbox.checked ? (li.style.textDecoration = "line-through", list.appendChild(div)) // re appendChild pour mettre a la fin si checked
                         : li.style.textDecoration = "none";
     });
 
@@ -45,8 +44,8 @@ function createDiv() {
     deleteButton.textContent = "Supprimer";
     deleteButton.id = "supprimer";
     deleteButton.addEventListener("click", function() {
-        div.remove();
-        updateCheck();
+        div.remove();   // Supprime le div parent
+        updateCheck();  // Update compteur
     });
 
     const editButton = document.createElement("button");
@@ -62,6 +61,7 @@ function createDiv() {
     pDate.innerText = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " - " 
                         + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
+    // Append les éléments au div puis le div au ul
     div.appendChild(checkbox);
     div.appendChild(li);
     div.appendChild(pDate);
@@ -80,9 +80,9 @@ function updateCheck() {
     let max = 0;
 
     liste.forEach(items => {
-        max += 1;
+        max += 1;   // cCompter tâches totales
 
-        if (items.checked) {
+        if (items.checked) {    // Compter tâches faites (checked)
             compteur += 1;
         }
     });
@@ -90,9 +90,11 @@ function updateCheck() {
     p.innerText = "Tache(s) " + compteur + " / " + max;
 }
 
+// Div en paramètre pour permettre de modifier tous les éléments
 function edit(div) {
 
     const li = div.querySelector("li");
+    const pDate = div.querySelector("p");
     const modifyButton = div.querySelector("#modifier");
 
     const input = document.createElement("input");
@@ -107,8 +109,7 @@ function edit(div) {
         if (input.value) {
             let newDate = new Date();
 
-            const pDate = div.querySelector("p");
-
+            // Re remplace les élément + actualisation date
             li.textContent = input.value;
             input.replaceWith(li);
             pDate.innerText = newDate.getDate() + "/" + (newDate.getMonth() + 1) + "/" + newDate.getFullYear() + " - " 
@@ -118,6 +119,7 @@ function edit(div) {
         }
     });
 
+    // Remplacer éléments à l'appel de la fonction
     li.replaceWith(input);
     modifyButton.replaceWith(saveButton);
 }
@@ -155,7 +157,7 @@ function sortDate(asc_or_desc)
     const liste = document.querySelectorAll("ul > div > p");
     const ul = document.querySelector("ul");
 
-    let task = getDate()   ;
+    let task = getDate();
     let orderTask = [];
 
     task.sort((a, b) => {
